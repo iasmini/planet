@@ -24,4 +24,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from db import db
+    db.init_app(app)
+
+    from . import views
+    app.register_blueprint(views.bp)
+
+    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/init-db/', endpoint='init-db')
+
     return app
