@@ -18,12 +18,6 @@ def index():
 @bp.route('/init-db/')
 def initialize_db():
     init_db()
-    flash("Banco de dados inicializado.")
-    return redirect(url_for("index"))
-
-
-@bp.route('/planets/')
-def get_planets():
     response = requests.get("http://swapi.dev/api/planets/")
     planets = response.json()
 
@@ -41,9 +35,17 @@ def get_planets():
                 terrain=planet['terrain'], surface_water=planet['surface_water'], population=planet['population'])
             db.execute(sql)
             db.commit()
+
+        flash("Planetas salvos com sucesso.")
     except Exception as e:
         logging.info(e)
+        flash("Erro ao salvar os planetas.")
 
+    return redirect(url_for("index"))
+
+
+@bp.route('/planets/')
+def get_planets():
     cursor = get_db_cursor()
     query = "SELECT name, climate, population FROM planet ORDER BY name DESC"
     cursor.execute(query)
