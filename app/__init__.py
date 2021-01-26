@@ -32,5 +32,6 @@ def create_app(test_config=None):
 
     app.add_url_rule('/', endpoint='index')
     app.add_url_rule('/init-db/', endpoint='init-db')
+    app.add_url_rule('/planets/', endpoint='planets')
 
     return app
