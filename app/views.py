@@ -18,28 +18,33 @@ def index():
 @bp.route('/init-db/')
 def initialize_db():
     init_db()
-    response = requests.get("http://swapi.dev/api/planets/")
-    planets = response.json()
 
     db = get_db()
 
-    try:
-        for planet in planets['results']:
+    error_message = None
+    urls = get_all_urls('http://swapi.dev/api/planets/')
+    for url in urls:
+        response = requests.get(url)
+        planet = response.json()
+
+        try:
             planet['population'] = 'null' if planet['population'] == 'unknown' else planet['population']
-            planet['surface_water'] = 'null' if planet['surface_water'] == 'unknown' else planet['surface_water']
             sql = """insert into planet (name, rotation_period, orbital_period, diameter, climate, gravity,
-                       terrain, surface_water, population) values ('{name}', {rotation_period}, {orbital_period},
-                       {diameter}, '{climate}', '{gravity}', '{terrain}', {surface_water}, {population});""".format(
+                       terrain, surface_water, population) values ('{name}', '{rotation_period}', '{orbital_period}',
+                       '{diameter}', '{climate}', '{gravity}', '{terrain}', '{surface_water}', {population});""".format(
                 name=planet['name'], rotation_period=planet['rotation_period'], orbital_period=planet['orbital_period'],
                 diameter=planet['diameter'], climate=planet['climate'], gravity=planet['gravity'],
                 terrain=planet['terrain'], surface_water=planet['surface_water'], population=planet['population'])
             db.execute(sql)
             db.commit()
+        except Exception as e:
+            logging.info(e)
+            error_message = "Erro ao salvar o planeta {name}. Erro: {planet}".format(name=planet['name'], planet=planet)
+            flash(error_message)
+            break
 
+    if not error_message:
         flash("Planetas salvos com sucesso.")
-    except Exception as e:
-        logging.info(e)
-        flash("Erro ao salvar os planetas.")
 
     return redirect(url_for("index"))
 
@@ -61,3 +66,18 @@ def get_planets():
     planets = json.dumps(objects_list)
 
     return render_template('planet/planets.html', planets=planets)
+
+
+def get_all_urls(url):
+    urls = []
+    has_next = True
+    while has_next:
+        response = requests.get(url)
+        json_data = json.loads(response.content)
+        for resource in json_data['results']:
+            urls.append(resource['url'])
+        if bool(json_data['next']):
+            url = json_data['next']
+        else:
+            has_next = False
+    return urls
