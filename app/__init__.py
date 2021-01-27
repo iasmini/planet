@@ -1,43 +1,30 @@
-import os
-
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
 from flask_restful import Api
 
-from api.views import Planet
+app = Flask(__name__)
+app.config.from_object('config')
+app.config.from_mapping(
+    SECRET_KEY='dev',
+)
+# FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be
+# disabled by default in the future. Set it to True or False to suppress this warning.
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+db = SQLAlchemy(app)
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'planet.sqlite'),
-    )
+# ATENCAO: tem que ser importado nessa ordem senao exibe o erro abaixo:
+# ImportError: cannot import name 'db' from partially initialized module 'app'
+# (most likely due to a circular import) (/opt/portfolio/planet/app/__init__.py)
+from app.planet.controllers import planet_bp
+from api.controllers import ApiResource
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+app.register_blueprint(planet_bp)
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+app.add_url_rule('/', endpoint='index')
+app.add_url_rule('/init-db/', endpoint='init-db')
+app.add_url_rule('/planets/', endpoint='planets')
 
-    from db import db
-    db.init_app(app)
-
-    from . import views
-    app.register_blueprint(views.bp)
-
-    app.add_url_rule('/', endpoint='index')
-    app.add_url_rule('/init-db/', endpoint='init-db')
-    app.add_url_rule('/planets/', endpoint='planets')
-
-    api = Api(app)
-    api.add_resource(Planet, '/api/planets/', endpoint='planets')
-
-    return app
+api = Api(app)
+api.add_resource(ApiResource, '/api/planets/', endpoint='planets')

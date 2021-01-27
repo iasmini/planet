@@ -4,7 +4,7 @@
   <a class="btn btn-info" href="{{ url_for('init-db') }}" onclick="showAwaitScreen()" role="button">Buscar planetas</a>
   <a class="btn btn-success" href="{{ url_for('planets') }}" role="button">Listar planetas</a>
   <!-- Modal -->
-  {% include "planet/await_modal.html" %}
+  {% include "./planet/await_modal.html" %}
 {% endblock %}
 {% block scripts %}
   {{ super() }}

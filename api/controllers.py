@@ -4,18 +4,17 @@ import json
 from flask import request, Blueprint
 from flask_restful import Resource
 
-from db.db import get_db_cursor
+from app.planet.models import Planet
 
 bp = Blueprint('api', __name__)
 
 
-class Planet(Resource):
-    def __init__(self):
-        self.cursor = get_db_cursor()
-
+class ApiResource(Resource):
     @bp.route('/api/planets/')
     def get(self):
         """ Returns a list of planets """
+
+        rows = Planet.query.with_entities(Planet.name, Planet.climate, Planet.population)
 
         # filters
         climate = request.args.get('climate', None)
@@ -23,22 +22,23 @@ class Planet(Resource):
 
         sort = request.args.get('sort', None)
 
-        query = "SELECT name, climate, population FROM planet WHERE 1=1"
+        planets = list()
         if climate:
-            query += " AND climate = '{}'".format(climate)
+            planets = rows.filter_by(climate=climate)
         if name:
-            query += " AND name LIKE '%{}%'".format(name)
+            planets = rows.filter_by(name=name)
         if sort:
-            query += " ORDER BY {}".format(sort)
-        res = self.cursor.execute(query)
-        rows = res.fetchall()
+            sort_by = sort.split(' ')[0]
+            sort_type = sort.split(' ')[1]
+            sort = sort_by + '.' + sort_type + '()'
+            planets = rows.order_by(sort)
 
         objects_list = []
-        for row in rows:
+        for planet in planets:
             d = collections.OrderedDict()
-            d['name'] = row[0]
-            d['climate'] = row[1]
-            d['population'] = row[2]
+            d['name'] = planet[0]
+            d['climate'] = planet[1]
+            d['population'] = planet[2]
             objects_list.append(d)
 
         planets = json.dumps(objects_list)
