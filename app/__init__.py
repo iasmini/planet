@@ -1,6 +1,9 @@
 import os
 
 from flask import Flask
+from flask_restful import Api
+
+from api.views import Planet
 
 
 def create_app(test_config=None):
@@ -33,5 +36,8 @@ def create_app(test_config=None):
     app.add_url_rule('/', endpoint='index')
     app.add_url_rule('/init-db/', endpoint='init-db')
     app.add_url_rule('/planets/', endpoint='planets')
+
+    api = Api(app)
+    api.add_resource(Planet, '/api/planets/', endpoint='planets')
 
     return app
