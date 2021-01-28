@@ -5,12 +5,6 @@ from flask_restful import Api
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.config.from_mapping(
-    SECRET_KEY='dev',
-)
-# FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be
-# disabled by default in the future. Set it to True or False to suppress this warning.
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
