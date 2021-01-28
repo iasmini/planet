@@ -1,5 +1,6 @@
 import collections
 from flask import Blueprint, render_template, flash, redirect, url_for
+from sqlalchemy.exc import OperationalError
 import json
 import logging
 import requests
@@ -53,18 +54,23 @@ def populate_db():
 
 @planet_bp.route('/planets/')
 def get_planets():
-    rows = Planet.query.with_entities(Planet.name, Planet.climate, Planet.population)
+    try:
+        rows = Planet.query.with_entities(Planet.name, Planet.climate, Planet.population)
 
-    objects_list = list()
-    for row in rows:
-        d = collections.OrderedDict()
-        d['name'] = row[0]
-        d['climate'] = row[1]
-        d['population'] = row[2]
-        objects_list.append(d)
-    planets = json.dumps(objects_list)
+        objects_list = list()
+        for row in rows:
+            d = collections.OrderedDict()
+            d['name'] = row[0]
+            d['climate'] = row[1]
+            d['population'] = row[2]
+            objects_list.append(d)
+        planets = json.dumps(objects_list)
+    except OperationalError as e:
+        flash("Ainda não existem planetas cadastrados. Clique em 'Buscar Planetas'.")
 
-    return render_template('./planet/planets.html', planets=planets)
+        return redirect(url_for("index"))
+    else:
+        return render_template('./planet/planets.html', planets=planets)
 
 
 def initialize_db():
