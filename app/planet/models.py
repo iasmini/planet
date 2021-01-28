@@ -1,11 +1,12 @@
+from sqlalchemy_serializer import SerializerMixin
+
 from app import db
 
 
-class Planet(db.Model):
+class Planet(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String, nullable=False)
     rotation_period = db.Column(db.String, nullable=True)
-    email = db.Column(db.String, nullable=True)
     orbital_period = db.Column(db.String, nullable=True)
     diameter = db.Column(db.String, nullable=True)
     climate = db.Column(db.String, nullable=True)

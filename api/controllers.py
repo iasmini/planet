@@ -1,8 +1,6 @@
-import collections
-import json
-
 from flask import request, Blueprint
 from flask_restful import Resource
+from sqlalchemy.sql import text
 
 from app.planet.models import Planet
 
@@ -13,8 +11,7 @@ class ApiResource(Resource):
     @bp.route('/api/planets/')
     def get(self):
         """ Returns a list of planets """
-
-        rows = Planet.query.with_entities(Planet.name, Planet.climate, Planet.population)
+        rows = Planet.query.order_by(Planet.name).all()
 
         # filters
         climate = request.args.get('climate', None)
@@ -22,27 +19,21 @@ class ApiResource(Resource):
 
         sort = request.args.get('sort', None)
 
-        planets = list()
+        filters = None
         if climate:
-            planets = rows.filter_by(climate=climate)
+            filters = "climate='" + climate + "'"
         if name:
-            planets = rows.filter_by(name=name)
+            if filters:
+                filters += " AND "
+            filters += "name='" + name + "'"
+        if filters:
+            rows = Planet.query.filter(text(filters))
+
         if sort:
-            sort_by = sort.split(' ')[0]
-            sort_type = sort.split(' ')[1]
-            sort = sort_by + '.' + sort_type + '()'
-            planets = rows.order_by(sort)
+            rows = rows.order_by(text(sort))
 
-        objects_list = []
-        for planet in planets:
-            d = collections.OrderedDict()
-            d['name'] = planet[0]
-            d['climate'] = planet[1]
-            d['population'] = planet[2]
-            objects_list.append(d)
+        planets = list()
+        for row in rows:
+            planets.append(row.to_dict())
 
-        planets = json.dumps(objects_list)
-
-        return {
-            'planets': planets
-        }
+        return planets
