@@ -3,6 +3,11 @@ Get a list of planets from a [public API](http://swapi.dev/api/), saves it on a 
 It's also available an API Rest with the endpoint:
 /api/planets/ - lists all the planets
 
+## Images
+![](static/img/tela1.png)
+![](static/img/tela2.png)
+![](static/img/tela3.png)
+
 ## Installation
 1. Clone the [repo](https://github.com/iasmini/planet)
 ```shell
@@ -305,8 +310,3 @@ Response
 |       400        | Não foram encontrados planetas de acordo com os parâmetros informados.                      |
 |       400        | Página {page} não existe. Página mínima 1.                                                  |
 |       400        | Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}. |
-
-## Images
-![](static/img/tela1.png)
-![](static/img/tela2.png)
-![](static/img/tela3.png)
