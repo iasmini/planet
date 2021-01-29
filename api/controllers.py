@@ -48,7 +48,9 @@ class ApiResource(Resource):
         if page:
             planets = get_paginated_planets(planets, '/planets', page=page)
 
-        return planets
+            return planets
+        else:
+            return {"status_code": 200, "response": planets}
 
 
 def get_paginated_planets(results, url, page):
@@ -69,7 +71,7 @@ def get_paginated_planets(results, url, page):
         return {"status_code": 400, "response": message}
 
     if page > max_page:
-        message = 'Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}'.format(
+        message = 'Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}.'.format(
             page=page, max_page=max_page)
         return {"status_code": 400, "response": message}
 
