@@ -9,7 +9,7 @@ It's also available an API Rest with the endpoint:
 ![](static/img/tela3.png)
 
 ## Installation
-1. Clone the [repo](https://github.com/iasmini/planet)
+1. Clone the [repo](https://github.com/iasmini/planet):
 ```shell
     git clone https://github.com/iasmini/planet
 ```
@@ -18,6 +18,14 @@ It's also available an API Rest with the endpoint:
 ```shell
     pip install -r app/requirements.txt
 ```
+3. External packages:  
+[Flask~=1.1.2](https://flask.palletsprojects.com/en/1.1.x/)  
+[Flask-RESTful==0.3.8](https://flask-restful.readthedocs.io/en/latest/)  
+[Flask-SQLAlchemy~=2.4.4](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+[pytest~=6.2.2](https://docs.pytest.org/en/latest/)   
+[requests~=2.25.1](https://requests.readthedocs.io/en/master/)  
+[SQLAlchemy-serializer~=1.3.4.4](https://github.com/n0nSmoker/SQLAlchemy-serializer)
+
 
 ## How to use it
 1. Access the root directory (planet) and run the command:
@@ -310,3 +318,16 @@ Response
 |       400        | Não foram encontrados planetas de acordo com os parâmetros informados.                      |
 |       400        | Página {page} não existe. Página mínima 1.                                                  |
 |       400        | Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}. |
+
+## Running tests
+1. Access the root directory (planet) and run the command to build the package:
+> **_NOTE:_**  It's recommended doing it within a virtual environment.
+```shell
+    pip install -e .
+```
+2. Run:
+```shell
+    pytest
+```
+All the tests must pass:
+![](static/img/pytest.png)
