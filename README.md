@@ -320,14 +320,17 @@ Response
 |       400        | Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}. |
 
 ## Running tests
-1. Access the root directory (planet) and run the command to build the package:
 > **_NOTE:_**  It's recommended doing it within a virtual environment.
-```shell
-    pip install -e .
-```
-2. Run:
+1. Access the root directory (planet) and run the command
 ```shell
     pytest
 ```
 All the tests must pass:
 ![](static/img/pytest.png)
+
+## Building the package
+To run tests you must build the package if there isn't one. Access the root directory (planet) and run the command:
+> **_NOTE:_**  It's recommended doing it within a virtual environment.
+```shell
+    pip install -e .
+```
