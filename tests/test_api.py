@@ -43,19 +43,7 @@ def test_combined():
     assert response.json['status_code'] == 200
 
 
-def test_get_unknown_planet():
-    response = app.test_client().get('/api/planets/?name=planet-x&page=1')
-
-    assert response.json['status_code'] == 400
-
-
 def test_get_min_page():
     response = app.test_client().get('/api/planets/?name=planet-x&page=-1')
-
-    assert response.json['status_code'] == 400
-
-
-def test_get_max_page():
-    response = app.test_client().get('/api/planets/?name=planet-x&page=100')
 
     assert response.json['status_code'] == 400

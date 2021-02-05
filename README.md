@@ -1,7 +1,6 @@
 # planet
-Get a list of planets from a [public API](http://swapi.dev/api/), saves it on a SQLite database and show the data in a Datatable. Made with Flask.
-It's also available an API Rest with the endpoint:
-/api/planets/ - lists all the planets
+Get a list of planets from a [public API](http://swapi.dev/api/), saves it on a SQLite database and show the data in a Datatable. Made with Flask.  
+It's also available an API Rest.
 
 ## Images
 ![](static/img/tela1.png)
@@ -35,6 +34,12 @@ It's also available an API Rest with the endpoint:
 2. It will be available on: http://127.0.0.1:5000/
 
 ## API
+Root URL: http://127.0.0.1:5000
+### Lists all the planets
+```http request
+GET "/api/planets/"
+```
+
 ### Search by part of the name and climate
 ```http request
 GET "/api/planets/?climate=arid&name=tatooi"
@@ -152,129 +157,126 @@ Response
     "response": {
         "page": 2,
         "items_per_page": 10,
-        "count": 23,
-        "previous": "/planets?page=1",
-        "next": "",
         "results": [
             {
-                "diameter": "6400",
-                "surface_water": "98",
-                "name": "Bestine IV",
-                "id": 26,
-                "climate": "temperate",
+                "orbital_period": "680",
                 "gravity": "unknown",
                 "terrain": "rocky islands, oceans",
-                "orbital_period": "680",
+                "surface_water": "98",
+                "population": 62000000,
+                "diameter": "6400",
                 "rotation_period": "26",
-                "population": 62000000
+                "climate": "temperate",
+                "name": "Bestine IV",
+                "id": 26
             },
             {
-                "diameter": "14050",
-                "surface_water": "10",
-                "name": "Ord Mantell",
-                "id": 27,
-                "climate": "temperate",
+                "orbital_period": "334",
                 "gravity": "1 standard",
                 "terrain": "plains, seas, mesas",
-                "orbital_period": "334",
+                "surface_water": "10",
+                "population": 4000000000,
+                "diameter": "14050",
                 "rotation_period": "26",
-                "population": 4000000000
+                "climate": "temperate",
+                "name": "Ord Mantell",
+                "id": 27
             },
             {
-                "diameter": "11030",
-                "surface_water": "100",
-                "name": "Mon Cala",
-                "id": 31,
-                "climate": "temperate",
+                "orbital_period": "398",
                 "gravity": "1",
                 "terrain": "oceans, reefs, islands",
-                "orbital_period": "398",
+                "surface_water": "100",
+                "population": 27000000000,
+                "diameter": "11030",
                 "rotation_period": "21",
-                "population": 27000000000
+                "climate": "temperate",
+                "name": "Mon Cala",
+                "id": 31
             },
             {
-                "diameter": "13500",
-                "surface_water": "40",
-                "name": "Chandrila",
-                "id": 32,
-                "climate": "temperate",
+                "orbital_period": "368",
                 "gravity": "1",
                 "terrain": "plains, forests",
-                "orbital_period": "368",
+                "surface_water": "40",
+                "population": 1200000000,
+                "diameter": "13500",
                 "rotation_period": "20",
-                "population": 1200000000
+                "climate": "temperate",
+                "name": "Chandrila",
+                "id": 32
             },
             {
-                "diameter": "7900",
-                "surface_water": "unknown",
-                "name": "Toydaria",
-                "id": 34,
-                "climate": "temperate",
+                "orbital_period": "184",
                 "gravity": "1",
                 "terrain": "swamps, lakes",
-                "orbital_period": "184",
+                "surface_water": "unknown",
+                "population": 11000000,
+                "diameter": "7900",
                 "rotation_period": "21",
-                "population": 11000000
+                "climate": "temperate",
+                "name": "Toydaria",
+                "id": 34
             },
             {
-                "diameter": "10480",
-                "surface_water": "unknown",
-                "name": "Dathomir",
-                "id": 36,
-                "climate": "temperate",
+                "orbital_period": "491",
                 "gravity": "0.9",
                 "terrain": "forests, deserts, savannas",
-                "orbital_period": "491",
+                "surface_water": "unknown",
+                "population": 5200,
+                "diameter": "10480",
                 "rotation_period": "24",
-                "population": 5200
+                "climate": "temperate",
+                "name": "Dathomir",
+                "id": 36
             },
             {
-                "diameter": "10120",
-                "surface_water": "unknown",
-                "name": "Haruun Kal",
-                "id": 42,
-                "climate": "temperate",
+                "orbital_period": "383",
                 "gravity": "0.98",
                 "terrain": "toxic cloudsea, plateaus, volcanoes",
-                "orbital_period": "383",
+                "surface_water": "unknown",
+                "population": 705300,
+                "diameter": "10120",
                 "rotation_period": "25",
-                "population": 705300
+                "climate": "temperate",
+                "name": "Haruun Kal",
+                "id": 42
             },
             {
-                "diameter": "unknown",
-                "surface_water": "20",
-                "name": "Cerea",
-                "id": 43,
-                "climate": "temperate",
+                "orbital_period": "386",
                 "gravity": "1",
                 "terrain": "verdant",
-                "orbital_period": "386",
+                "surface_water": "20",
+                "population": 450000000,
+                "diameter": "unknown",
                 "rotation_period": "27",
-                "population": 450000000
+                "climate": "temperate",
+                "name": "Cerea",
+                "id": 43
             },
             {
-                "diameter": "13400",
-                "surface_water": "unknown",
-                "name": "Dorin",
-                "id": 49,
-                "climate": "temperate",
+                "orbital_period": "409",
                 "gravity": "1",
                 "terrain": "unknown",
-                "orbital_period": "409",
+                "surface_water": "unknown",
+                "population": null,
+                "diameter": "13400",
                 "rotation_period": "22",
-                "population": null
+                "climate": "temperate",
+                "name": "Dorin",
+                "id": 49
             },
             {
-                "diameter": "unknown",
-                "surface_water": "unknown",
-                "name": "Champala",
-                "id": 50,
-                "climate": "temperate",
+                "orbital_period": "318",
                 "gravity": "1",
                 "terrain": "oceans, rainforests, plateaus",
-                "orbital_period": "318",
+                "surface_water": "unknown",
+                "population": 3500000000,
+                "diameter": "unknown",
                 "rotation_period": "27",
-                "population": 3500000000
+                "climate": "temperate",
+                "name": "Champala",
+                "id": 50
             }
         ]
     }
@@ -315,9 +317,7 @@ Response
 | Status code      | Response                                                                                    |
 | ---------------- | ------------------------------------------------------------------------------------------- |
 |       200        | Success                                                                                     |
-|       400        | Não foram encontrados planetas de acordo com os parâmetros informados.                      |
 |       400        | Página {page} não existe. Página mínima 1.                                                  |
-|       400        | Página {page} não existe. Página máxima de acordo com os parâmetros informados: {max_page}. |
 
 ## Running tests
 > **_NOTE:_**  It's recommended doing it within a virtual environment.
