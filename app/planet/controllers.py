@@ -1,9 +1,11 @@
-import collections
-from flask import Blueprint, render_template, flash, redirect, url_for
-from sqlalchemy.exc import OperationalError
 import json
 import logging
 import requests
+
+from functools import reduce
+from urllib.parse import urljoin
+
+from flask import Blueprint, render_template, flash, redirect, url_for, current_app
 
 from app import db
 from app.planet.models import Planet
@@ -54,23 +56,21 @@ def populate_db():
 
 @planet_bp.route('/planets/')
 def get_planets():
+    base_url = current_app.config['BASE_URL']
+
     try:
-        rows = Planet.query.with_entities(Planet.name, Planet.climate, Planet.population)
-
-        objects_list = list()
-        for row in rows:
-            d = collections.OrderedDict()
-            d['name'] = row[0]
-            d['climate'] = row[1]
-            d['population'] = row[2]
-            objects_list.append(d)
-        planets = json.dumps(objects_list)
-    except OperationalError as e:
-        flash("Ainda não existem planetas cadastrados. Clique em 'Buscar Planetas'.")
-
+        url = reduce(urljoin, [base_url, "/api/planets/"])
+        response = requests.get(url)
+    except Exception as e:
+        flash("Erro ao listar os planetas. Erro: {}".format(e))
         return redirect(url_for("index"))
     else:
-        return render_template('./planet/planets.html', planets=planets)
+        if response.json()['status_code'] == 200:
+            planets = response.json()
+            return render_template('./planet/planets.html', planets=json.dumps(planets['response']['results']))
+        else:
+            flash(response.json()['message'])
+            return redirect(url_for("index"))
 
 
 def initialize_db():

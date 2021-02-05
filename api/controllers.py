@@ -1,6 +1,8 @@
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.sql import text
+
 from flask import request, Blueprint, current_app
 from flask_restful import Resource
-from sqlalchemy.sql import text
 
 from app.planet.models import Planet
 
@@ -39,9 +41,14 @@ class ApiResource(Resource):
                 rows = rows.order_by(text(sort))
         else:
             if sort:
-                rows = Planet.query.order_by(text(sort)).all()
+                rows = Planet.query.order_by(text(sort))
             else:
                 rows = Planet.query
+
+        try:
+            rows.count()
+        except OperationalError:
+            return {"status_code": 400, "message": "Ainda não existem planetas cadastrados."}
 
         planets = list()
         # exibe somente resultados de acordo com a pagina informada na url
